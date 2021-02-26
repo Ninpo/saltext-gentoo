@@ -1,56 +1,46 @@
-# -*- coding: utf-8 -*-
 """
     :codeauthor: Jayesh Kariya <jayeshk@saltstack.com>
 """
-# Import Python libs
-from __future__ import absolute_import
 
-# Import Salt Libs
+import pytest
 import salt.states.makeconf as makeconf
-
-# Import Salt Testing Libs
-from tests.support.mixins import LoaderModuleMockMixin
 from tests.support.mock import MagicMock, patch
-from tests.support.unit import TestCase
 
 
-class MakeconfTestCase(TestCase, LoaderModuleMockMixin):
+@pytest.fixture
+def configure_loader_modules():
+    return {makeconf: {}}
+
+
+def test_present():
     """
-    Test cases for salt.states.makeconf
+    Test to verify that the variable is in the ``make.conf``
+    and has the provided settings.
     """
+    name = "makeopts"
 
-    def setup_loader_modules(self):
-        return {makeconf: {}}
+    ret = {"name": name, "result": True, "comment": "", "changes": {}}
 
-    # 'present' function tests: 1
+    mock_t = MagicMock(return_value=True)
+    with patch.dict(makeconf.__salt__, {"makeconf.get_var": mock_t}):
+        comt = "Variable {} is already present in make.conf".format(name)
+        ret.update({"comment": comt})
+        assert makeconf.present(name) == ret
 
-    def test_present(self):
-        """
-        Test to verify that the variable is in the ``make.conf``
-        and has the provided settings.
-        """
-        name = "makeopts"
 
-        ret = {"name": name, "result": True, "comment": "", "changes": {}}
+# 'absent' function tests: 1
 
-        mock_t = MagicMock(return_value=True)
-        with patch.dict(makeconf.__salt__, {"makeconf.get_var": mock_t}):
-            comt = "Variable {0} is already present in make.conf".format(name)
-            ret.update({"comment": comt})
-            self.assertDictEqual(makeconf.present(name), ret)
 
-    # 'absent' function tests: 1
+def test_absent():
+    """
+    Test to verify that the variable is not in the ``make.conf``.
+    """
+    name = "makeopts"
 
-    def test_absent(self):
-        """
-        Test to verify that the variable is not in the ``make.conf``.
-        """
-        name = "makeopts"
+    ret = {"name": name, "result": True, "comment": "", "changes": {}}
 
-        ret = {"name": name, "result": True, "comment": "", "changes": {}}
-
-        mock = MagicMock(return_value=None)
-        with patch.dict(makeconf.__salt__, {"makeconf.get_var": mock}):
-            comt = "Variable {0} is already absent from make.conf".format(name)
-            ret.update({"comment": comt})
-            self.assertDictEqual(makeconf.absent(name), ret)
+    mock = MagicMock(return_value=None)
+    with patch.dict(makeconf.__salt__, {"makeconf.get_var": mock}):
+        comt = "Variable {} is already absent from make.conf".format(name)
+        ret.update({"comment": comt})
+        assert makeconf.absent(name) == ret
