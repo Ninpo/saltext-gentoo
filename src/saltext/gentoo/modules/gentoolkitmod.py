@@ -8,7 +8,8 @@ import os
 HAS_GENTOOLKIT = False
 
 try:
-    from gentoolkit.eclean import clean, cli
+    from gentoolkit.eclean import clean
+    from gentoolkit.eclean import cli
     from gentoolkit.eclean import exclude as excludemod
     from gentoolkit.eclean import search
 

@@ -27,7 +27,8 @@ import salt.utils.path
 import salt.utils.pkg
 import salt.utils.systemd
 import salt.utils.versions
-from salt.exceptions import CommandExecutionError, MinionError
+from salt.exceptions import CommandExecutionError
+from salt.exceptions import MinionError
 
 HAS_PORTAGE = False
 try:
@@ -148,9 +149,7 @@ def _process_emerge_err(stdout, stderr):
     if slot_conflicts:
         ret["slot conflicts"] = slot_conflicts
 
-    blocked = re.compile(r"(?m)^\[blocks .+\] ([^ ]+/[^ ]+-[0-9]+[^ ]+).*$").findall(
-        stdout
-    )
+    blocked = re.compile(r"(?m)^\[blocks .+\] ([^ ]+/[^ ]+-[0-9]+[^ ]+).*$").findall(stdout)
 
     unsatisfied = re.compile(r"Error: The above package list contains").findall(stderr)
 
@@ -285,9 +284,7 @@ def latest_version(*names, **kwargs):
 
 
 # available_version is being deprecated
-available_version = salt.utils.functools.alias_function(
-    latest_version, "available_version"
-)
+available_version = salt.utils.functools.alias_function(latest_version, "available_version")
 
 
 def _get_upgradable(backtrack=3):
@@ -440,9 +437,7 @@ def list_pkgs(versions_as_list=False, **kwargs):
     """
     versions_as_list = salt.utils.data.is_true(versions_as_list)
     # not yet implemented or not applicable
-    if any(
-        [salt.utils.data.is_true(kwargs.get(x)) for x in ("removed", "purge_desired")]
-    ):
+    if any([salt.utils.data.is_true(kwargs.get(x)) for x in ("removed", "purge_desired")]):
         return {}
 
     if "pkg.list_pkgs" in __context__ and kwargs.get("use_context", True):
@@ -485,9 +480,7 @@ def refresh_db(**kwargs):
     """
     has_emaint = os.path.isdir("/etc/portage/repos.conf")
     has_eix = True if "eix.sync" in __salt__ else False
-    has_webrsync = (
-        True if __salt__["makeconf.features_contains"]("webrsync-gpg") else False
-    )
+    has_webrsync = True if __salt__["makeconf.features_contains"]("webrsync-gpg") else False
 
     # Remove rtag file to keep multiple refreshes from happening in pkg states
     salt.utils.pkg.clear_rtag(__opts__)
@@ -499,8 +492,7 @@ def refresh_db(**kwargs):
         timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(main_repo_root))
         if now - timestamp < day:
             log.info(
-                "Did not sync package tree since last sync was done at"
-                " %s, less than 1 day ago",
+                "Did not sync package tree since last sync was done at" " %s, less than 1 day ago",
                 timestamp,
             )
             return False
@@ -670,9 +662,7 @@ def install(
         refresh_db()
 
     try:
-        pkg_params, pkg_type = __salt__["pkg_resource.parse_targets"](
-            name, pkgs, sources, **kwargs
-        )
+        pkg_params, pkg_type = __salt__["pkg_resource.parse_targets"](name, pkgs, sources, **kwargs)
     except MinionError as exc:
         raise CommandExecutionError(exc)
 
@@ -733,13 +723,9 @@ def install(
                     target = f"{param}"
 
                 if "[" in target:
-                    old = __salt__["portage_config.get_flags_from_package_conf"](
-                        "use", target
-                    )
+                    old = __salt__["portage_config.get_flags_from_package_conf"]("use", target)
                     __salt__["portage_config.append_use_flags"](target)
-                    new = __salt__["portage_config.get_flags_from_package_conf"](
-                        "use", target
-                    )
+                    new = __salt__["portage_config.get_flags_from_package_conf"]("use", target)
                     if old != new:
                         changes[param + "-USE"] = {"old": old, "new": new}
                     target = target[: target.rfind("[")]
@@ -768,9 +754,7 @@ def install(
         targets = pkg_params
 
     cmd = []
-    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"](
-        "systemd.scope", True
-    ):
+    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"]("systemd.scope", True):
         cmd.extend(["systemd-run", "--scope"])
     cmd.extend(["emerge", "--ask", "n", "--quiet"])
     cmd.extend(bin_opts)
@@ -858,9 +842,7 @@ def update(pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs)
 
     old = list_pkgs()
     cmd = []
-    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"](
-        "systemd.scope", True
-    ):
+    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"]("systemd.scope", True):
         cmd.extend(["systemd-run", "--scope"])
     cmd.extend(["emerge", "--ask", "n", "--quiet", "--update", "--newuse", "--oneshot"])
     cmd.extend(bin_opts)
@@ -918,8 +900,7 @@ def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):
 
     .. code-block:: python
 
-        {'<package>':  {'old': '<old-version>',
-                        'new': '<new-version>'}}
+        {"<package>": {"old": "<old-version>", "new": "<new-version>"}}
 
     CLI Example:
 
@@ -941,9 +922,7 @@ def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):
 
     old = list_pkgs()
     cmd = []
-    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"](
-        "systemd.scope", True
-    ):
+    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"]("systemd.scope", True):
         cmd.extend(["systemd-run", "--scope"])
     cmd.extend(
         [
@@ -1028,12 +1007,7 @@ def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):
         raise CommandExecutionError(exc)
 
     old = list_pkgs()
-    if (
-        name
-        and not pkgs
-        and (slot is not None or fromrepo is not None)
-        and len(pkg_params) == 1
-    ):
+    if name and not pkgs and (slot is not None or fromrepo is not None) and len(pkg_params) == 1:
         fullatom = name
         if slot is not None:
             targets = [f"{fullatom}:{slot}"]
@@ -1047,9 +1021,7 @@ def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):
         return {}
 
     cmd = []
-    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"](
-        "systemd.scope", True
-    ):
+    if salt.utils.systemd.has_scope(__context__) and __salt__["config.get"]("systemd.scope", True):
         cmd.extend(["systemd-run", "--scope"])
     cmd.extend(["emerge", "--ask", "n", "--quiet", "--unmerge", "--quiet-unmerge-warn"])
     cmd.extend(targets)
@@ -1159,12 +1131,7 @@ def depclean(name=None, slot=None, fromrepo=None, pkgs=None):
         raise CommandExecutionError(exc)
 
     old = list_pkgs()
-    if (
-        name
-        and not pkgs
-        and (slot is not None or fromrepo is not None)
-        and len(pkg_params) == 1
-    ):
+    if name and not pkgs and (slot is not None or fromrepo is not None) and len(pkg_params) == 1:
         fullatom = name
         if slot is not None:
             targets = [f"{fullatom}:{slot}"]
@@ -1273,12 +1240,7 @@ def check_extra_requirements(pkgname, pkgver):
 
     des_uses = set(portage.dep.dep_getusedeps(atom))
     cur_use = cur_use.split()
-    if (
-        len(
-            [x for x in des_uses.difference(cur_use) if x[0] != "-" or x[1:] in cur_use]
-        )
-        > 0
-    ):
+    if len([x for x in des_uses.difference(cur_use) if x[0] != "-" or x[1:] in cur_use]) > 0:
         return False
 
     if keyword:

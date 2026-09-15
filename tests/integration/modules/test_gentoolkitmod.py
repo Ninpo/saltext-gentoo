@@ -16,4 +16,4 @@ class GentoolkitModuleTest(ModuleCase):
 
     def test_revdep_rebuild_true(self):
         ret = self.run_function("gentoolkit.revdep_rebuild")
-        self.assertTrue(ret)
+        assert ret

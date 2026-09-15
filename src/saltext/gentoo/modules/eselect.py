@@ -22,9 +22,7 @@ def __virtual__():
     )
 
 
-def exec_action(
-    module, action, module_parameter=None, action_parameter=None, state_only=False
-):
+def exec_action(module, action, module_parameter=None, action_parameter=None, state_only=False):
     """
     Execute an arbitrary action on a module.
 

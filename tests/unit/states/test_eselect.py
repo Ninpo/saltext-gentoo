@@ -1,11 +1,13 @@
 """
-    :codeauthor: Jayesh Kariya <jayeshk@saltstack.com>
+:codeauthor: Jayesh Kariya <jayeshk@saltstack.com>
 """
+
+from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 
-import salt.states.eselect as eselect
-from tests.support.mock import MagicMock, patch
+import saltext.gentoo.states.eselect as eselect
 
 
 @pytest.fixture

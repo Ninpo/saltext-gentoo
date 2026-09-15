@@ -48,15 +48,9 @@ def set_(name, target, module_parameter=None, action_parameter=None):
     )
 
     if target == old_target:
-        ret["comment"] = "Target '{}' is already set on '{}' module.".format(
-            target, name
-        )
-    elif target not in __salt__["eselect.get_target_list"](
-        name, action_parameter=action_parameter
-    ):
-        ret["comment"] = "Target '{}' is not available for '{}' module.".format(
-            target, name
-        )
+        ret["comment"] = f"Target '{target}' is already set on '{name}' module."
+    elif target not in __salt__["eselect.get_target_list"](name, action_parameter=action_parameter):
+        ret["comment"] = f"Target '{target}' is not available for '{name}' module."
         ret["result"] = False
     elif __opts__["test"]:
         ret["comment"] = f"Target '{target}' will be set on '{name}' module."
@@ -72,8 +66,6 @@ def set_(name, target, module_parameter=None, action_parameter=None):
             ret["changes"][name] = {"old": old_target, "new": target}
             ret["comment"] = f"Target '{target}' set on '{name}' module."
         else:
-            ret["comment"] = "Target '{}' failed to be set on '{}' module.".format(
-                target, name
-            )
+            ret["comment"] = f"Target '{target}' failed to be set on '{name}' module."
             ret["result"] = False
     return ret

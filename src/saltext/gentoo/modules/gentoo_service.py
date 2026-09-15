@@ -43,9 +43,7 @@ def __virtual__():
 
 def _ret_code(cmd, ignore_retcode=False):
     log.debug("executing [%s]", cmd)
-    sts = __salt__["cmd.retcode"](
-        cmd, python_shell=False, ignore_retcode=ignore_retcode
-    )
+    sts = __salt__["cmd.retcode"](cmd, python_shell=False, ignore_retcode=ignore_retcode)
     return sts
 
 
@@ -91,9 +89,7 @@ def _service_cmd(*args):
 
 
 def _enable_disable_cmd(name, command, runlevels=()):
-    return "rc-update {} {} {}".format(
-        command, name, " ".join(sorted(runlevels))
-    ).strip()
+    return "rc-update {} {} {}".format(command, name, " ".join(sorted(runlevels))).strip()
 
 
 def get_enabled():
@@ -106,7 +102,7 @@ def get_enabled():
 
         salt '*' service.get_enabled
     """
-    (enabled_services, disabled_services) = _get_service_list()
+    enabled_services, disabled_services = _get_service_list()
     return OrderedDict(enabled_services)
 
 
@@ -120,7 +116,7 @@ def get_disabled():
 
         salt '*' service.get_disabled
     """
-    (enabled_services, disabled_services) = _get_service_list(
+    enabled_services, disabled_services = _get_service_list(
         include_enabled=False, include_disabled=True
     )
     return sorted(disabled_services)
@@ -137,7 +133,7 @@ def available(name):
 
         salt '*' service.available sshd
     """
-    (enabled_services, disabled_services) = _get_service_list(
+    enabled_services, disabled_services = _get_service_list(
         include_enabled=True, include_disabled=True
     )
     return name in enabled_services or name in disabled_services
@@ -168,7 +164,7 @@ def get_all():
 
         salt '*' service.get_all
     """
-    (enabled_services, disabled_services) = _get_service_list(
+    enabled_services, disabled_services = _get_service_list(
         include_enabled=True, include_disabled=True
     )
     enabled_services.update({s: [] for s in disabled_services})
@@ -298,9 +294,7 @@ def enable(name, **kwargs):
     """
     if "runlevels" in kwargs:
         requested_levels = set(
-            kwargs["runlevels"]
-            if isinstance(kwargs["runlevels"], list)
-            else [kwargs["runlevels"]]
+            kwargs["runlevels"] if isinstance(kwargs["runlevels"], list) else [kwargs["runlevels"]]
         )
         enabled_levels, disabled_levels = _enable_delta(name, requested_levels)
         commands = []
@@ -332,9 +326,7 @@ def disable(name, **kwargs):
     levels = []
     if "runlevels" in kwargs:
         requested_levels = set(
-            kwargs["runlevels"]
-            if isinstance(kwargs["runlevels"], list)
-            else [kwargs["runlevels"]]
+            kwargs["runlevels"] if isinstance(kwargs["runlevels"], list) else [kwargs["runlevels"]]
         )
         levels = _disable_delta(name, requested_levels)
         if not levels:
@@ -360,9 +352,7 @@ def enabled(name, **kwargs):
     if "runlevels" not in kwargs:
         return True
     requested_levels = set(
-        kwargs["runlevels"]
-        if isinstance(kwargs["runlevels"], list)
-        else [kwargs["runlevels"]]
+        kwargs["runlevels"] if isinstance(kwargs["runlevels"], list) else [kwargs["runlevels"]]
     )
     return len(requested_levels - set(enabled_services[name])) == 0
 

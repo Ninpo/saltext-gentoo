@@ -1,11 +1,14 @@
 """
-    Test cases for salt.modules.gentoo_service
+Test cases for salt.modules.gentoo_service
 """
+
+from unittest.mock import MagicMock
+from unittest.mock import call
+from unittest.mock import patch
 
 import pytest
 
-import salt.modules.gentoo_service as gentoo_service
-from tests.support.mock import MagicMock, call, patch
+import saltext.gentoo.modules.gentoo_service as gentoo_service
 
 
 @pytest.fixture
@@ -146,9 +149,7 @@ def test_start():
     mock = MagicMock(return_value=True)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.start("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name start", ignore_retcode=False, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name start", ignore_retcode=False, python_shell=False)
 
 
 def test_stop():
@@ -158,9 +159,7 @@ def test_stop():
     mock = MagicMock(return_value=True)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.stop("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name stop", ignore_retcode=False, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name stop", ignore_retcode=False, python_shell=False)
 
 
 def test_restart():
@@ -194,9 +193,7 @@ def test_zap():
     mock = MagicMock(return_value=True)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.zap("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name zap", ignore_retcode=False, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name zap", ignore_retcode=False, python_shell=False)
 
 
 def test_status():
@@ -211,33 +208,25 @@ def test_status():
     mock = MagicMock(return_value=0)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert gentoo_service.status("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name status", ignore_retcode=True, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name status", ignore_retcode=True, python_shell=False)
 
     # service is not running
     mock = MagicMock(return_value=1)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.status("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name status", ignore_retcode=True, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name status", ignore_retcode=True, python_shell=False)
 
     # service is stopped
     mock = MagicMock(return_value=3)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.status("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name status", ignore_retcode=True, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name status", ignore_retcode=True, python_shell=False)
 
     # service has crashed
     mock = MagicMock(return_value=32)
     with patch.dict(gentoo_service.__salt__, {"cmd.retcode": mock}):
         assert not gentoo_service.status("name")
-    mock.assert_called_once_with(
-        "/etc/init.d/name status", ignore_retcode=True, python_shell=False
-    )
+    mock.assert_called_once_with("/etc/init.d/name status", ignore_retcode=True, python_shell=False)
 
 
 def test_enable():
@@ -488,9 +477,7 @@ def test_enabled():
         # service is enabled at a different runlevels
         assert not gentoo_service.enabled("name", runlevels="some-other-level")
         # service is enabled at a different runlevels
-        assert not gentoo_service.enabled(
-            "name", runlevels=["boot", "some-other-level"]
-        )
+        assert not gentoo_service.enabled("name", runlevels=["boot", "some-other-level"])
 
 
 def test_disabled():
