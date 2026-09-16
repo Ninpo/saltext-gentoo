@@ -52,7 +52,7 @@ def _list_services():
 
 
 def _get_service_list(include_enabled=True, include_disabled=False):
-    enabled_services = dict()
+    enabled_services = {}
     disabled_services = set()
     lines = _list_services()
     for line in lines:
@@ -102,7 +102,7 @@ def get_enabled():
 
         salt '*' service.get_enabled
     """
-    enabled_services, disabled_services = _get_service_list()
+    enabled_services, _ = _get_service_list()
     return OrderedDict(enabled_services)
 
 
@@ -116,9 +116,7 @@ def get_disabled():
 
         salt '*' service.get_disabled
     """
-    enabled_services, disabled_services = _get_service_list(
-        include_enabled=False, include_disabled=True
-    )
+    _, disabled_services = _get_service_list(include_enabled=False, include_disabled=True)
     return sorted(disabled_services)
 
 
