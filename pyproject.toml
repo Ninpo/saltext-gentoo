@@ -100,10 +100,6 @@ platforms = ["any"]
 where = ["src"]
 exclude = ["tests"]
 
-[tool.distutils.bdist_wheel]
-# Use this option if your package is pure-python
-universal = 1
-
 [tool.distutils.sdist]
 owner = "root"
 group = "root"
