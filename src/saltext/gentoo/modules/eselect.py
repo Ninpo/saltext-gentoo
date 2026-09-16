@@ -41,7 +41,9 @@ def exec_action(module, action, module_parameter=None, action_parameter=None, st
     state_only
         don't return any output but only the success/failure of the operation
 
-    CLI Example (updating the ``php`` implementation used for ``apache2``):
+    CLI Example:
+
+    To update the ``php`` implementation used for ``apache2``
 
     .. code-block:: bash
 
@@ -141,7 +143,9 @@ def get_current_target(module, module_parameter=None, action_parameter=None):
 
         salt '*' eselect.get_current_target java-vm action_parameter='system'
 
-    CLI Example (current target of ``kernel`` symlink):
+    CLI Example:
+
+    Get the current target of ``kernel`` symlink:
 
     .. code-block:: bash
 
@@ -179,13 +183,17 @@ def set_target(module, target, module_parameter=None, action_parameter=None):
     action_parameter
         additional params passed to the defined action
 
-    CLI Example (setting target of system-wide ``java-vm``):
+    CLI Example:
+
+    Set target of system-wide ``java-vm``:
 
     .. code-block:: bash
 
         salt '*' eselect.set_target java-vm icedtea-bin-7 action_parameter='system'
 
-    CLI Example (setting target of ``kernel`` symlink):
+    CLI Example:
+
+    Set target of ``kernel`` symlink:
 
     .. code-block:: bash
 
