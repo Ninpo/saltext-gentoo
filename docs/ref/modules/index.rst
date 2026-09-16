@@ -15,3 +15,4 @@ _________________
     gentoo_service
     gentoolkitmod
     makeconf
+    portage_config
