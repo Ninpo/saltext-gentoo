@@ -19,6 +19,7 @@ import logging
 import os
 import re
 
+import portage
 import salt.utils.args
 import salt.utils.compat
 import salt.utils.data
@@ -30,25 +31,6 @@ import salt.utils.versions
 from salt.exceptions import CommandExecutionError
 from salt.exceptions import MinionError
 
-HAS_PORTAGE = False
-try:
-    import portage
-
-    HAS_PORTAGE = True
-except ImportError:
-    import os
-    import sys
-
-    if os.path.isdir("/usr/lib/portage/pym"):
-        try:
-            # In a virtualenv, the portage python path needs to be manually added
-            sys.path.insert(0, "/usr/lib/portage/pym")
-            import portage
-
-            HAS_PORTAGE = True
-        except ImportError:
-            pass
-
 log = logging.getLogger(__name__)
 
 # Define the module's virtual name
@@ -59,7 +41,7 @@ def __virtual__():
     """
     Confirm this module is on a Gentoo based system
     """
-    if HAS_PORTAGE and __grains__["os"] == "Gentoo":
+    if __grains__["os"] == "Gentoo":
         return __virtualname__
     return (
         False,
@@ -69,16 +51,10 @@ def __virtual__():
 
 
 def _vartree():
-    import portage  # pylint: disable=3rd-party-module-not-gated
-
-    portage = salt.utils.compat.reload(portage)
     return portage.db[portage.root]["vartree"]
 
 
 def _porttree():
-    import portage  # pylint: disable=3rd-party-module-not-gated
-
-    portage = salt.utils.compat.reload(portage)
     return portage.db[portage.root]["porttree"]
 
 
