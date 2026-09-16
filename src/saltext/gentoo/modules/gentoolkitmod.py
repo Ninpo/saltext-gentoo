@@ -5,17 +5,14 @@ Support for Gentoolkit
 
 import os
 
-HAS_GENTOOLKIT = False
-
-try:
+try:  # pylint: disable=invalid-name
+    HAS_GENTOOLKIT = True
     from gentoolkit.eclean import clean
     from gentoolkit.eclean import cli
     from gentoolkit.eclean import exclude as excludemod
     from gentoolkit.eclean import search
-
-    HAS_GENTOOLKIT = True
 except ImportError:
-    pass
+    HAS_GENTOOLKIT = False
 
 # Define the module's virtual name
 __virtualname__ = "gentoolkit"
@@ -75,7 +72,7 @@ def _parse_exclude(exclude_file):
     if os.path.isfile(exclude_file):
         exclude = excludemod.parseExcludeFile(exclude_file, lambda x: None)
     else:
-        exclude = dict()
+        exclude = {}
     return exclude
 
 
@@ -157,9 +154,10 @@ def eclean_dist(
         exclude=exclude,
     )
 
-    cleaned = dict()
+    cleaned = {}
 
-    def _eclean_progress_controller(size, key, *args):
+    def _eclean_progress_controller(*args):
+        size, key, _, _ = args
         cleaned[key] = _pretty_size(size)
         return True
 
@@ -240,9 +238,10 @@ def eclean_pkg(
         pkgdir=search.pkgdir,
     )
 
-    cleaned = dict()
+    cleaned = {}
 
-    def _eclean_progress_controller(size, key, *args):
+    def _eclean_progress_controller(*args):
+        size, key, _, _ = args
         cleaned[key] = _pretty_size(size)
         return True
 
@@ -260,7 +259,7 @@ def _glsa_list_process_output(output):
 
     Returns a dict containing the glsa id, description, status, and CVEs
     """
-    ret = dict()
+    ret = {}
     for line in output:
         try:
             glsa_id, status, desc = line.split(None, 2)
@@ -274,7 +273,7 @@ def _glsa_list_process_output(output):
                 desc, cves = desc.rsplit(None, 1)
                 cves = cves.split(",")
             else:
-                cves = list()
+                cves = []
             ret[glsa_id] = {"description": desc, "status": status, "CVEs": cves}
         except ValueError:
             pass
@@ -307,10 +306,10 @@ def glsa_check_list(glsa_list):
     if isinstance(glsa_list, list):
         for glsa in glsa_list:
             cmd += glsa + " "
-    elif glsa_list == "all" or glsa_list == "affected":
+    elif glsa_list in {"all", "affected"}:
         cmd += glsa_list
 
-    ret = dict()
+    ret = {}
     out = __salt__["cmd.run"](cmd, python_shell=False).split("\n")
     ret = _glsa_list_process_output(out)
     return ret
