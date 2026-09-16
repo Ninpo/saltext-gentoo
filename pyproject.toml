@@ -19,7 +19,7 @@ authors = [
 keywords = [
     "salt-extension",
 ]
-license = {text = "Apache Software License"}
+license = "Apache Software License"
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Cython",
@@ -29,7 +29,6 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
 ]
 requires-python = ">= 3.13"
 dynamic = ["version"]
