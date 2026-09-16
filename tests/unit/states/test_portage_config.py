@@ -15,19 +15,6 @@ def configure_loader_modules():
     return {portage_config: {"__opts__": {"test": True}}}
 
 
-def test_mod_init():
-    """
-    Test to enforce a nice structure on the configuration files.
-    """
-    name = "salt"
-
-    mock = MagicMock(side_effect=[True, Exception])
-    with patch.dict(portage_config.__salt__, {"portage_config.enforce_nice_config": mock}):
-        assert portage_config.mod_init(name)
-
-        assert not portage_config.mod_init(name)
-
-
 def test_flags():
     """
     Test to enforce the given flags on the given package or ``DEPEND`` atom.

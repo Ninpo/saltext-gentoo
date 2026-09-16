@@ -19,7 +19,7 @@ authors = [
 keywords = [
     "salt-extension",
 ]
-license = "Apache Software License"
+license = {text = "Apache-2.0"}
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Cython",
