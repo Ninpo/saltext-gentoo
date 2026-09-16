@@ -1,4 +1,4 @@
-[![Push](https://github.com/Ninpo/saltext-gentoo/actions/workflows/push.yml/badge.svg)](https://github.com/Ninpo/saltext-gentoo/actions/workflows/push.yml)
+[![Push](https://github.com/Ninpo/saltext-gentoo/actions/workflows/push.yml/badge.svg)](https://github.com/Ninpo/saltext-gentoo/actions/workflows/push.yml)[![Tagged Releases](https://github.com/Ninpo/saltext-gentoo/actions/workflows/tag.yml/badge.svg?branch=main)](https://github.com/Ninpo/saltext-gentoo/actions/workflows/tag.yml)
 # Salt Extension for Gentoo Linux
 
 Salt Extension for interacting with Gentoo Linux
