@@ -146,7 +146,7 @@ def _process_emerge_err(stdout, stderr):
     return ret
 
 
-def check_db(*names, **kwargs):
+def check_db(*names, **kwargs):  # pylint: disable=unused-argument
     """
     .. versionadded:: 0.17.0
 
@@ -344,7 +344,7 @@ def list_upgrades(refresh=True, backtrack=3, **kwargs):  # pylint: disable=W0613
     return _get_upgradable(backtrack)
 
 
-def upgrade_available(name, **kwargs):
+def upgrade_available(name, **kwargs):  # pylint: disable=unused-argument
     """
     Check whether or not an upgrade is available for a given package
 
@@ -433,6 +433,7 @@ def list_pkgs(versions_as_list=False, **kwargs):
 
 
 def refresh_db(**kwargs):
+    # TODO: Fix execution logic now portage is available. Allow kwargs to contain repo names.
     """
     Update the portage tree using the first available method from the following
     list:
@@ -759,7 +760,7 @@ def install(
     return changes
 
 
-def update(pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs):
+def update(pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -844,7 +845,7 @@ def update(pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs)
     return ret
 
 
-def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):
+def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -933,7 +934,7 @@ def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):
     return ret
 
 
-def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):
+def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -1023,7 +1024,8 @@ def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):
     return ret
 
 
-def purge(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):
+def purge(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint: disable=unused-argument
+    # TODO: Fix purge/remove functionality to be Gentoo compliant.
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
