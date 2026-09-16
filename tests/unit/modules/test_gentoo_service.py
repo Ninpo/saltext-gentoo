@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-import saltext.gentoo.modules.gentoo_service as gentoo_service
+from saltext.gentoo.modules import gentoo_service
 
 
 @pytest.fixture

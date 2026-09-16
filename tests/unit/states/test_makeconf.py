@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-import saltext.gentoo.states.makeconf as makeconf
+from saltext.gentoo.states import makeconf
 
 
 @pytest.fixture

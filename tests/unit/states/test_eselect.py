@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-import saltext.gentoo.states.eselect as eselect
+from saltext.gentoo.states import eselect
 
 
 @pytest.fixture
