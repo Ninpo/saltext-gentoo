@@ -200,7 +200,7 @@ def check_db(*names, **kwargs):
             continue
         if "/" not in name:
             ret.setdefault(name, {})["found"] = False
-            ret[name]["suggestions"] = porttree_matches(name)
+            ret[name]["suggestions"] = _porttree_matches(name)
         else:
             ret.setdefault(name, {})["found"] = name in _allnodes()
             if ret[name]["found"] is False:
@@ -397,8 +397,10 @@ def version(*names, **kwargs):
     return __salt__["pkg_resource.version"](*names, **kwargs)
 
 
-def porttree_matches(name):
+def _porttree_matches(name):
     """
+    Helper function for pkg.checkdb.
+
     Returns a list containing the matches for a given package name from the
     portage tree. Note that the specific version of the package will not be
     provided for packages that have several versions in the portage tree, but
