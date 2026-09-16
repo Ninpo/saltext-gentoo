@@ -3,6 +3,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 This project uses [Semantic Versioning](https://semver.org/) - MAJOR.MINOR.PATCH
 
 # Changelog
+## 0.2.2 (2026-09-16)
+Build time fixes
+
 ## 0.2.1 (2026-09-16)
 Change some defaults to match Gentoo Portage behaviour
 
