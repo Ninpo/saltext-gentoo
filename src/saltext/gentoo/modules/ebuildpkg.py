@@ -184,7 +184,7 @@ def check_db(*names, **kwargs):  # pylint: disable=unused-argument
     return ret
 
 
-def ex_mod_init(low):
+def ex_mod_init():
     """
     If the config option ``ebuild.enforce_nice_config`` is set to True, this
     module will enforce a nice tree structure for /etc/portage/package.*
@@ -293,8 +293,7 @@ def _get_upgradable(backtrack=3):
                 msg += ": " + call[key]
                 break
         raise CommandExecutionError(msg)
-    else:
-        out = call["stdout"]
+    out = call["stdout"]
 
     rexp = re.compile(
         r"(?m)^\[.+\] "
@@ -415,7 +414,7 @@ def list_pkgs(versions_as_list=False, **kwargs):
     """
     versions_as_list = salt.utils.data.is_true(versions_as_list)
     # not yet implemented or not applicable
-    if any([salt.utils.data.is_true(kwargs.get(x)) for x in ("removed", "purge_desired")]):
+    if any(salt.utils.data.is_true(kwargs.get(x)) for x in ("removed", "purge_desired")):
         return {}
 
     if "pkg.list_pkgs" in __context__ and kwargs.get("use_context", True):
@@ -432,7 +431,7 @@ def list_pkgs(versions_as_list=False, **kwargs):
     return ret
 
 
-def refresh_db(**kwargs):
+def refresh_db(**kwargs):  # pylint: disable=unused-argument
     # TODO: Fix execution logic now portage is available. Allow kwargs to contain repo names.
     """
     Update the portage tree using the first available method from the following
@@ -458,8 +457,8 @@ def refresh_db(**kwargs):
         salt '*' pkg.refresh_db
     """
     has_emaint = os.path.isdir("/etc/portage/repos.conf")
-    has_eix = True if "eix.sync" in __salt__ else False
-    has_webrsync = True if __salt__["makeconf.features_contains"]("webrsync-gpg") else False
+    has_eix = "eix.sync" in __salt__
+    has_webrsync = bool(__salt__["makeconf.features_contains"]("webrsync-gpg"))
 
     # Remove rtag file to keep multiple refreshes from happening in pkg states
     salt.utils.pkg.clear_rtag(__opts__)
@@ -471,7 +470,7 @@ def refresh_db(**kwargs):
         timestamp = datetime.datetime.fromtimestamp(os.path.getmtime(main_repo_root))
         if now - timestamp < day:
             log.info(
-                "Did not sync package tree since last sync was done at" " %s, less than 1 day ago",
+                "Did not sync package tree since last sync was done at %s, less than 1 day ago",
                 timestamp,
             )
             return False
@@ -508,7 +507,7 @@ def _flags_changed(inst_flags, conf_flags):
             conf_flags.remove(i)
         except ValueError:
             return True
-    return True if conf_flags else False
+    return bool(conf_flags)
 
 
 def install(
@@ -643,7 +642,7 @@ def install(
     try:
         pkg_params, pkg_type = __salt__["pkg_resource.parse_targets"](name, pkgs, sources, **kwargs)
     except MinionError as exc:
-        raise CommandExecutionError(exc)
+        raise CommandExecutionError(exc) from exc
 
     # Handle version kwarg for a single package target
     if pkgs is None and sources is None:
@@ -675,7 +674,7 @@ def install(
     changes = {}
 
     if pkg_type == "repository":
-        targets = list()
+        targets = []
         for param, version_num in pkg_params.items():
             original_param = param
             param = _p_to_cp(param)
@@ -760,7 +759,9 @@ def install(
     return changes
 
 
-def update(pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs):  # pylint: disable=unused-argument
+def update(
+    pkg, slot=None, fromrepo=None, refresh=False, binhost=None, **kwargs
+):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -934,7 +935,9 @@ def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):  # pylint: disab
     return ret
 
 
-def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint: disable=unused-argument
+def remove(
+    name=None, slot=None, fromrepo=None, pkgs=None, **kwargs
+):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -983,7 +986,7 @@ def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint:
     try:
         pkg_params = __salt__["pkg_resource.parse_targets"](name, pkgs)[0]
     except MinionError as exc:
-        raise CommandExecutionError(exc)
+        raise CommandExecutionError(exc) from exc
 
     old = list_pkgs()
     if name and not pkgs and (slot is not None or fromrepo is not None) and len(pkg_params) == 1:
@@ -1024,7 +1027,9 @@ def remove(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint:
     return ret
 
 
-def purge(name=None, slot=None, fromrepo=None, pkgs=None, **kwargs):  # pylint: disable=unused-argument
+def purge(
+    name=None, slot=None, fromrepo=None, pkgs=None, **kwargs
+):  # pylint: disable=unused-argument
     # TODO: Fix purge/remove functionality to be Gentoo compliant.
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
@@ -1108,7 +1113,7 @@ def depclean(name=None, slot=None, fromrepo=None, pkgs=None):
     try:
         pkg_params = __salt__["pkg_resource.parse_targets"](name, pkgs)[0]
     except MinionError as exc:
-        raise CommandExecutionError(exc)
+        raise CommandExecutionError(exc) from exc
 
     old = list_pkgs()
     if name and not pkgs and (slot is not None or fromrepo is not None) and len(pkg_params) == 1:
