@@ -3,6 +3,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 This project uses [Semantic Versioning](https://semver.org/) - MAJOR.MINOR.PATCH
 
 # Changelog
+## 0.2.0 (2026-09-16)
+Migrated portage_config into extension
+
 ## 0.1.1 (2026-09-16)
 Removed nonsensical ex_mod_init drop-in from ebuildpkg
 

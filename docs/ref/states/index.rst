@@ -11,3 +11,4 @@ _____________
 
     eselect
     makeconf
+    portage_config
