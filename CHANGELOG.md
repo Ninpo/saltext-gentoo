@@ -3,6 +3,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 This project uses [Semantic Versioning](https://semver.org/) - MAJOR.MINOR.PATCH
 
 # Changelog
+## 0.2.1 (2026-09-16)
+Change some defaults to match Gentoo Portage behaviour
+
 ## 0.2.0 (2026-09-16)
 Migrated portage_config into extension
 
