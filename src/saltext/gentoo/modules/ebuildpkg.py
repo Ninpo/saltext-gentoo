@@ -230,7 +230,7 @@ def latest_version(*names, **kwargs):
 available_version = salt.utils.functools.alias_function(latest_version, "available_version")
 
 
-def _get_upgradable(backtrack=3):
+def _get_upgradable(backtrack=20):
     """
     Utility function to get upgradable packages
 
@@ -285,7 +285,7 @@ def _get_upgradable(backtrack=3):
     return ret
 
 
-def list_upgrades(refresh=True, backtrack=3, **kwargs):  # pylint: disable=W0613
+def list_upgrades(refresh=True, backtrack=20, **kwargs):  # pylint: disable=W0613
     """
     List all available package upgrades.
 
@@ -295,7 +295,7 @@ def list_upgrades(refresh=True, backtrack=3, **kwargs):  # pylint: disable=W0613
     backtrack
         Specifies an integer number of times to backtrack if dependency
         calculation fails due to a conflict or an unsatisfied dependency
-        (default: ´3´).
+        (default: ´20´).
 
         .. versionadded:: 2015.8.0
 
@@ -813,7 +813,7 @@ def update(
     return ret
 
 
-def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):  # pylint: disable=unused-argument
+def upgrade(refresh=True, binhost=None, backtrack=20, **kwargs):  # pylint: disable=unused-argument
     """
     .. versionchanged:: 2015.8.12,2016.3.3,2016.11.0
         On minions running systemd>=205, `systemd-run(1)`_ is now used to
@@ -839,7 +839,7 @@ def upgrade(refresh=True, binhost=None, backtrack=3, **kwargs):  # pylint: disab
     backtrack
         Specifies an integer number of times to backtrack if dependency
         calculation fails due to a conflict or an unsatisfied dependency
-        (default: ´3´).
+        (default: ´20´).
 
         .. versionadded:: 2015.8.0
 
