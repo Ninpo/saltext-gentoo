@@ -3,6 +3,9 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 This project uses [Semantic Versioning](https://semver.org/) - MAJOR.MINOR.PATCH
 
 # Changelog
+## 0.3.0 (2026-09-16)
+Remove gentoo_service module in favour of saltext-openrc as a dependency.
+
 ## 0.2.2 (2026-09-16)
 Build time fixes
 

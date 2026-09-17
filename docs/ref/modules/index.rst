@@ -12,7 +12,6 @@ _________________
     ebuildpkg
     eix
     eselect
-    gentoo_service
     gentoolkitmod
     makeconf
     portage_config
