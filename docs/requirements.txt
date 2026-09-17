@@ -92,7 +92,7 @@ rich==15.0.0
 roman-numerals==4.1.0
 rpm_vercmp==0.1.2
 salt==3008.2
-git+https://github.com/Ninpo/saltext-gentoo.git@v0.2.2
+git+https://github.com/Ninpo/saltext-gentoo.git@v0.3.0
 saltext.openrc==0.1.0
 setproctitle==1.3.7
 setuptools==75.5.0
